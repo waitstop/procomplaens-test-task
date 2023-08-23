@@ -1,25 +1,37 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div class="products-container">
+    <ProductCard v-for="product in products"
+                 :product="product"
+                 :key="product.id"
+    />
+  </div>
+  <AddProductModal/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import ProductCard from "@/components/ProductCard.vue";
+import AddProductModal from "@/components/AddProductModal.vue";
+import {store} from "@/store";
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
-  }
-});
+    ProductCard,
+    AddProductModal
+  },
+  data: () => ({
+    products: store.getters.productsSortedByAvailability
+  })
+})
 </script>
 
-<style lang="scss">
-#app {
-  font-family: "Roboto", sans-serif;
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<style>
+.products-container{
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  padding: 5rem;
 }
 </style>
