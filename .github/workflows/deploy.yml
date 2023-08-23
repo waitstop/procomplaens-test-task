@@ -11,4 +11,4 @@ jobs:
       with:
         username: 'waitstop'
         reponame: 'procomplaens-test-task'
-        token: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+        token: ${{ secrets.GH_TOKEN }} # Leave this line unchanged
