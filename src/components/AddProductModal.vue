@@ -1,16 +1,20 @@
 <template>
-  <div v-show="modalState" class="add-product-modal">
-    <h2>Добавить товар</h2>
-    <form @submit.prevent="handleSubmit">
-      <input v-model="product.title" required type="text" placeholder="Название товара">
-      <input v-model="product.price" required type="number" placeholder="Цена товара ($)">
-      <textarea v-model="product.description" placeholder="Описание товара"/>
-      <input @change="handleFileUpload($event.target.files[0])" type="file" accept=".png,.jpg,.jpeg">
-      <button type="submit">Добавить товар</button>
-    </form>
-    <button @click="() => modalState = false">&CircleTimes;</button>
-  </div>
-  <div @click="()=>modalState = true" v-show="!modalState" class="toggle-modal">&plus;</div>
+  <Transition name="fade">
+    <div v-show="modalState" class="add-product-modal">
+      <h2>Добавить товар</h2>
+      <form @submit.prevent="handleSubmit">
+        <input v-model="product.title" required type="text" placeholder="Название товара">
+        <input v-model="product.price" required type="number" placeholder="Цена товара ($)">
+        <textarea v-model="product.description" placeholder="Описание товара"/>
+        <input ref="fileInput" @change="handleFileUpload($event.target.files[0])" type="file" accept=".png,.jpg,.jpeg">
+        <button type="submit">Добавить товар</button>
+      </form>
+      <button @click="() => modalState = false">&CircleTimes;</button>
+    </div>
+  </Transition>
+  <Transition name="fade">
+    <div @click="()=>modalState = true" v-show="!modalState" class="toggle-modal">&plus;</div>
+  </Transition>
 </template>
 
 <script lang="ts">
@@ -26,6 +30,11 @@ export default defineComponent({
         state: true
       })
       store.commit('incrementId')
+
+      // Reset form
+      this.product = <Product>{}
+      const fileInput = this.$refs.fileInput as HTMLInputElement
+      fileInput.value = ""
     },
     handleFileUpload(file: File){
       if(!file) return
@@ -35,7 +44,6 @@ export default defineComponent({
         this.product.thumbnail = fr.result
       }
       fr.readAsDataURL(file)
-      console.log(fr.result)
     }
   },
   data:()=>({
@@ -46,7 +54,17 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+  .fade{
+    &-enter-active, &-leave-active{
+      transition: all .25s ease;
+    }
+    &-enter-from, &-leave-to{
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+  }
   .toggle-modal{
+    z-index: 999;
     position: fixed;
     right: 2rem;
     bottom: 2rem;

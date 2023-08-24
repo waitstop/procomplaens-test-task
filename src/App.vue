@@ -1,9 +1,9 @@
 <template>
-  <div class="products-container">
-    <ProductCard v-for="product in products"
-                 :product="product"
-                 :key="product.id"
-    />
+  <div class="products-container" v-auto-animate="{duration: 500}">
+      <ProductCard v-for="product in products"
+                   :product="product"
+                   :key="product.id"
+      />
   </div>
   <AddProductModal/>
 </template>
